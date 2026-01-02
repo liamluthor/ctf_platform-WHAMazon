@@ -1,20 +1,26 @@
 import { Layout } from "@/components/layout/Layout";
-import { products } from "@/lib/products";
 import { ProductCard } from "@/components/product/ProductCard";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { useLocation } from "wouter";
+import { useQuery } from "@tanstack/react-query";
+import { productsApi } from "@/lib/api";
 
 export default function SearchResults() {
   const [location] = useLocation();
   const searchParams = new URLSearchParams(window.location.search);
   const query = searchParams.get("q") || "";
 
-  // Fake filtering
-  const filteredProducts = products.filter(p => 
-    p.title.toLowerCase().includes(query.toLowerCase()) || 
+  const { data: products, isLoading } = useQuery({
+    queryKey: ["products"],
+    queryFn: productsApi.getAll,
+  });
+
+  // Filter products based on search query
+  const filteredProducts = products?.filter(p =>
+    p.title.toLowerCase().includes(query.toLowerCase()) ||
     p.category.toLowerCase().includes(query.toLowerCase())
-  );
+  ) || [];
 
   return (
     <Layout>
@@ -27,9 +33,9 @@ export default function SearchResults() {
         <div className="hidden md:block w-[240px] flex-shrink-0 text-sm">
            <h3 className="font-bold mb-2">Delivery Day</h3>
            <div className="flex items-center gap-2 mb-1">
-             <Checkbox id="prime" />
-             <Label htmlFor="prime" className="font-normal flex items-center gap-1">
-               <span className="text-[#007185] font-bold">Prime</span>
+             <Checkbox id="wham" />
+             <Label htmlFor="wham" className="font-normal flex items-center gap-1">
+               <span className="text-[#007185] font-bold">WHAM!</span>
                <span>Get It by Tomorrow</span>
              </Label>
            </div>
@@ -66,7 +72,9 @@ export default function SearchResults() {
 
         {/* Results Grid */}
         <div className="flex-1 pb-10">
-           {filteredProducts.length > 0 ? (
+           {isLoading ? (
+             <div className="text-center py-12">Loading products...</div>
+           ) : filteredProducts.length > 0 ? (
              <>
                <h2 className="font-bold text-xl mb-4">Results</h2>
                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
@@ -74,7 +82,7 @@ export default function SearchResults() {
                    <ProductCard key={product.id} product={product} />
                  ))}
                  {/* Fill with random other products to make grid look full if only 1 result */}
-                 {filteredProducts.length < 4 && products.filter(p => !filteredProducts.includes(p)).slice(0, 3).map(product => (
+                 {filteredProducts.length < 4 && products && products.filter(p => !filteredProducts.includes(p)).slice(0, 3).map(product => (
                     <ProductCard key={product.id} product={product} />
                  ))}
                </div>
@@ -86,7 +94,7 @@ export default function SearchResults() {
                 <div className="mt-8 w-full">
                   <h3 className="font-bold text-lg mb-4">Recommended for you</h3>
                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                     {products.slice(0, 4).map(product => (
+                     {products && products.slice(0, 4).map(product => (
                        <ProductCard key={product.id} product={product} />
                      ))}
                    </div>

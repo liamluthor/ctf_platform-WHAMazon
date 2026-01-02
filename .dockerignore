@@ -1,0 +1,59 @@
+# Dependencies
+node_modules
+
+# Development files
+.env
+.env.local
+.env.*.local
+
+# Git
+.git
+.gitignore
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build artifacts (will be created in container)
+dist
+
+# Development scripts with secrets
+script/generate-product-images-unsplash.ts
+script/generate-category-images.ts
+script/fix-stock-images.ts
+script/.unsplash-key
+
+# Test files
+*.test.ts
+*.test.tsx
+*.spec.ts
+*.spec.tsx
+
+# Documentation
+README.md
+*.md
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Temporary files
+*.tmp
+*.temp
+.cache
+
+# CI/CD
+.github
+.gitlab-ci.yml
+
+# Docker
+Dockerfile
+docker-compose.yml
+.dockerignore

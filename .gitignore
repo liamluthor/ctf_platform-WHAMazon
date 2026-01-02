@@ -4,3 +4,9 @@ dist
 server/public
 vite.config.ts.*
 *.tar.gz
+
+# Development-only scripts (not for CTF container)
+script/generate-product-images-unsplash.ts
+script/generate-category-images.ts
+script/fix-stock-images.ts
+script/.unsplash-key

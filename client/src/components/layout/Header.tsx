@@ -1,19 +1,28 @@
 import { Link, useLocation } from "wouter";
-import { Search, ShoppingCart, Menu, MapPin } from "lucide-react";
+import { Search, ShoppingCart, Menu, MapPin, LogOut, Shield } from "lucide-react";
 import logo from "@assets/generated_images/whamazon_logo.png";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
+import { useAuth } from "@/hooks/useAuth";
+import { useCart } from "@/hooks/useCart";
 
 export function Header() {
   const [location, setLocation] = useLocation();
   const [searchQuery, setSearchQuery] = useState("");
+  const { user, isAdmin, logout } = useAuth();
+  const { totalItems } = useCart();
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
       setLocation(`/search?q=${encodeURIComponent(searchQuery)}`);
     }
+  };
+
+  const handleLogout = async () => {
+    await logout();
+    setLocation("/");
   };
 
   return (
@@ -55,24 +64,50 @@ export function Header() {
 
         {/* Right Actions */}
         <div className="flex items-center gap-1 md:gap-4">
-          <Link href="/login">
-            <a className="hidden md:flex flex-col leading-none text-xs hover:outline-1 outline-white p-2 rounded-sm cursor-pointer">
-              <span className="text-white">Hello, sign in</span>
-              <span className="font-bold">Account & Lists</span>
-            </a>
-          </Link>
+          {user ? (
+            <>
+              <div className="hidden md:flex flex-col leading-none text-xs hover:outline-1 outline-white p-2 rounded-sm">
+                <span className="text-white">Hello, {user.username}</span>
+                <span className="font-bold">Account</span>
+              </div>
 
-          <Link href="/profile">
-            <a className="hidden md:flex flex-col leading-none text-xs hover:outline-1 outline-white p-2 rounded-sm cursor-pointer">
-              <span className="text-white">Returns</span>
-              <span className="font-bold">& Orders</span>
-            </a>
-          </Link>
+              <Link href="/profile">
+                <a className="hidden md:flex flex-col leading-none text-xs hover:outline-1 outline-white p-2 rounded-sm cursor-pointer">
+                  <span className="text-white">Returns</span>
+                  <span className="font-bold">& Orders</span>
+                </a>
+              </Link>
+
+              {isAdmin && (
+                <Link href="/admin">
+                  <a className="hidden md:flex items-center gap-1 text-xs hover:outline-1 outline-white p-2 rounded-sm cursor-pointer">
+                    <Shield className="w-4 h-4" />
+                    <span className="font-bold">Admin</span>
+                  </a>
+                </Link>
+              )}
+
+              <button
+                onClick={handleLogout}
+                className="hidden md:flex items-center gap-1 text-xs hover:outline-1 outline-white p-2 rounded-sm cursor-pointer"
+              >
+                <LogOut className="w-4 h-4" />
+                <span className="font-bold">Logout</span>
+              </button>
+            </>
+          ) : (
+            <Link href="/login">
+              <a className="hidden md:flex flex-col leading-none text-xs hover:outline-1 outline-white p-2 rounded-sm cursor-pointer">
+                <span className="text-white">Hello, sign in</span>
+                <span className="font-bold">Account & Lists</span>
+              </a>
+            </Link>
+          )}
 
           <Link href="/cart">
             <a className="flex items-end hover:outline-1 outline-white p-2 rounded-sm cursor-pointer relative">
               <ShoppingCart className="w-8 h-8" />
-              <span className="font-bold text-orange-400 absolute top-0 left-[22px] text-sm">0</span>
+              <span className="font-bold text-orange-400 absolute top-0 left-[22px] text-sm">{totalItems}</span>
               <span className="font-bold text-sm hidden md:inline mb-1">Cart</span>
             </a>
           </Link>

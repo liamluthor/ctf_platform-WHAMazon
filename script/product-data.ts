@@ -1,28 +1,11 @@
-import laptopImg from '@assets/stock_images/modern_laptop_comput_cc66f786.jpg';
-import headphonesImg from '@assets/stock_images/wireless_noise_cance_8cb46cff.jpg';
-import sneakersImg from '@assets/stock_images/colorful_running_sne_ff00427e.jpg';
-import watchImg from '@assets/stock_images/smart_watch_bad58c47.jpg';
-
-export interface Product {
-  id: string;
-  title: string;
-  price: number;
-  rating: number;
-  reviews: number;
-  image: string;
-  isWham: boolean;
-  category: string;
-  description: string;
-}
-
-export const products: Product[] = [
+export const productsToSeed = [
   {
     id: "1",
     title: "WHAM! Book Pro 16-inch - M3 Max, 36GB Unified Memory, 1TB SSD",
-    price: 2499.99,
-    rating: 4.8,
+    price: "2499.99",
+    rating: "4.8",
     reviews: 12453,
-    image: laptopImg,
+    image: "/stock_images/modern_laptop_comput_cc66f786.jpg",
     isWham: true,
     category: "Electronics",
     description: "The most powerful WHAM! Book ever. Crushes standard CTF challenges with ease."
@@ -30,10 +13,10 @@ export const products: Product[] = [
   {
     id: "2",
     title: "SonicBass 5000 Noise Cancelling Headphones - Wireless Bluetooth",
-    price: 299.00,
-    rating: 4.5,
+    price: "299.00",
+    rating: "4.5",
     reviews: 8902,
-    image: headphonesImg,
+    image: "/stock_images/wireless_noise_cance_8cb46cff.jpg",
     isWham: true,
     category: "Electronics",
     description: "Silence the haters and focus on your hacking. 40 hours battery life."
@@ -41,10 +24,10 @@ export const products: Product[] = [
   {
     id: "3",
     title: "SpeedRunner X - Professional Marathon Running Shoes",
-    price: 129.95,
-    rating: 4.2,
+    price: "129.95",
+    rating: "4.2",
     reviews: 342,
-    image: sneakersImg,
+    image: "/stock_images/colorful_running_sne_ff00427e.jpg",
     isWham: false,
     category: "Fashion",
     description: "Run away from security guards faster than ever before."
@@ -52,10 +35,10 @@ export const products: Product[] = [
   {
     id: "4",
     title: "SmartTime Elite - Fitness Tracker & Heart Rate Monitor",
-    price: 199.50,
-    rating: 4.7,
+    price: "199.50",
+    rating: "4.7",
     reviews: 5671,
-    image: watchImg,
+    image: "/stock_images/smart_watch_bad58c47.jpg",
     isWham: true,
     category: "Electronics",
     description: "Track your heart rate while deploying to production on a Friday."
@@ -63,8 +46,8 @@ export const products: Product[] = [
   {
     id: "5",
     title: "Hacker Hoodie - Black, Oversized, Anonymous",
-    price: 49.99,
-    rating: 4.9,
+    price: "49.99",
+    rating: "4.9",
     reviews: 666,
     image: "https://placehold.co/400x400/131921/FFFFFF?text=Hoodie",
     isWham: true,
@@ -74,8 +57,8 @@ export const products: Product[] = [
   {
     id: "6",
     title: "Mechanical Keyboard - Blue Switches, RGB Backlight",
-    price: 89.99,
-    rating: 4.6,
+    price: "89.99",
+    rating: "4.6",
     reviews: 2311,
     image: "https://placehold.co/400x400/333333/FFFFFF?text=Keyboard",
     isWham: true,
@@ -85,8 +68,8 @@ export const products: Product[] = [
   {
     id: "7",
     title: "SQL Injection for Dummies - 2nd Edition",
-    price: 24.99,
-    rating: 3.5,
+    price: "24.99",
+    rating: "3.5",
     reviews: 12,
     image: "https://placehold.co/400x600/f0f0f0/333333?text=Book",
     isWham: false,
@@ -96,8 +79,8 @@ export const products: Product[] = [
   {
     id: "8",
     title: "USB-C Hub Multiport Adapter - 7 in 1",
-    price: 35.00,
-    rating: 4.3,
+    price: "35.00",
+    rating: "4.3",
     reviews: 899,
     image: "https://placehold.co/400x400/dddddd/333333?text=Dongle",
     isWham: true,

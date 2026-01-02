@@ -9,7 +9,15 @@
     "build": "tsx script/build.ts",
     "start": "NODE_ENV=production node dist/index.cjs",
     "check": "tsc",
-    "db:push": "drizzle-kit push"
+    "db:push": "drizzle-kit push",
+    "db:seed": "tsx script/seed.ts",
+    "db:make-admin": "tsx script/make-admin.ts",
+    "db:bulk-products": "tsx script/generate-bulk-products.ts",
+    "db:fake-users": "tsx script/generate-fake-users.ts",
+    "db:export": "tsx script/export-db-for-container.ts",
+    "generate:images": "tsx script/generate-product-images.ts",
+    "generate:images:unsplash": "tsx script/generate-product-images-unsplash.ts",
+    "generate:categories": "tsx script/generate-category-images.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
@@ -47,6 +55,7 @@
     "cmdk": "^1.1.1",
     "connect-pg-simple": "^10.0.0",
     "date-fns": "^3.6.0",
+    "dotenv": "^17.2.3",
     "drizzle-orm": "^0.39.3",
     "drizzle-zod": "^0.7.0",
     "embla-carousel-react": "^8.6.0",

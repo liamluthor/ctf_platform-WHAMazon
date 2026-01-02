@@ -3,15 +3,44 @@ import logo from "@assets/generated_images/whamazon_logo.png";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Info } from "lucide-react";
+import { Info, AlertTriangle } from "lucide-react";
+import { useState } from "react";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function Register() {
   const [_, setLocation] = useLocation();
+  const { register } = useAuth();
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [passwordConfirm, setPasswordConfirm] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleRegister = (e: React.FormEvent) => {
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Fake register
-    setLocation("/");
+    setError("");
+
+    if (password !== passwordConfirm) {
+      setError("Passwords do not match");
+      return;
+    }
+
+    if (password.length < 6) {
+      setError("Password must be at least 6 characters");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      await register(username, email, password);
+      setLocation("/");
+    } catch (err: any) {
+      setError(err.message || "Registration failed");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -24,33 +53,50 @@ export default function Register() {
 
       <div className="w-full max-w-[350px] border border-gray-300 rounded-lg p-6 mb-6">
         <h1 className="text-3xl font-normal mb-4">Create account</h1>
-        
+
+        {error && (
+          <div className="bg-red-50 border border-red-200 text-red-700 px-3 py-2 rounded mb-4 text-sm flex items-center gap-2">
+            <AlertTriangle className="w-4 h-4" />
+            {error}
+          </div>
+        )}
+
         <form onSubmit={handleRegister} className="flex flex-col gap-4">
           <div className="space-y-1">
-            <Label htmlFor="name" className="font-bold text-xs">Your name</Label>
-            <Input 
-              id="name" 
-              placeholder="First and last name"
+            <Label htmlFor="username" className="font-bold text-xs">Username</Label>
+            <Input
+              id="username"
+              placeholder="Choose a username"
               className="h-8 rounded-sm border-gray-400 focus-visible:ring-1 focus-visible:ring-offset-0 focus-visible:ring-orange-400 focus-visible:border-orange-400 shadow-[inset_0_1px_2px_rgba(0,0,0,0.1)] placeholder:text-gray-400 text-sm"
+              value={username}
+              onChange={e => setUsername(e.target.value)}
+              required
             />
           </div>
 
           <div className="space-y-1">
-            <Label htmlFor="email" className="font-bold text-xs">Mobile number or email</Label>
-            <Input 
-              id="email" 
-              type="text" 
+            <Label htmlFor="email" className="font-bold text-xs">Email</Label>
+            <Input
+              id="email"
+              type="email"
               className="h-8 rounded-sm border-gray-400 focus-visible:ring-1 focus-visible:ring-offset-0 focus-visible:ring-orange-400 focus-visible:border-orange-400 shadow-[inset_0_1px_2px_rgba(0,0,0,0.1)]"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+              required
             />
           </div>
 
           <div className="space-y-1">
             <Label htmlFor="password" className="font-bold text-xs">Password</Label>
-            <Input 
-              id="password" 
-              type="password" 
+            <Input
+              id="password"
+              type="password"
               placeholder="At least 6 characters"
               className="h-8 rounded-sm border-gray-400 focus-visible:ring-1 focus-visible:ring-offset-0 focus-visible:ring-orange-400 focus-visible:border-orange-400 shadow-[inset_0_1px_2px_rgba(0,0,0,0.1)] placeholder:text-gray-400 text-sm"
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+              required
+              minLength={6}
             />
              <div className="flex items-center gap-1 text-[11px] text-gray-500 font-normal">
                <Info className="w-3 h-3 text-blue-600" />
@@ -60,15 +106,18 @@ export default function Register() {
 
           <div className="space-y-1">
             <Label htmlFor="password-confirm" className="font-bold text-xs">Re-enter password</Label>
-            <Input 
-              id="password-confirm" 
-              type="password" 
+            <Input
+              id="password-confirm"
+              type="password"
               className="h-8 rounded-sm border-gray-400 focus-visible:ring-1 focus-visible:ring-offset-0 focus-visible:ring-orange-400 focus-visible:border-orange-400 shadow-[inset_0_1px_2px_rgba(0,0,0,0.1)]"
+              value={passwordConfirm}
+              onChange={e => setPasswordConfirm(e.target.value)}
+              required
             />
           </div>
 
-          <Button type="submit" className="w-full bg-accent hover:bg-orange-400 text-black border border-gray-400 shadow-sm rounded-sm text-sm font-normal py-1 mt-2">
-            Continue
+          <Button type="submit" disabled={loading} className="w-full bg-accent hover:bg-orange-400 text-black border border-gray-400 shadow-sm rounded-sm text-sm font-normal py-1 mt-2">
+            {loading ? "Creating account..." : "Continue"}
           </Button>
 
           <div className="text-xs text-gray-600 mt-4 leading-normal">
