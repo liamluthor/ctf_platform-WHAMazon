@@ -3,6 +3,11 @@ set -e
 
 echo "🚀 Starting WHAMazon CTF Container..."
 
+# Fix permissions on data directory (tmpfs mount)
+echo "🔐 Setting up PostgreSQL data directory permissions..."
+chown -R postgres:postgres /var/lib/postgresql/data
+chmod 700 /var/lib/postgresql/data
+
 # Initialize PostgreSQL data directory if it doesn't exist
 if [ ! -d "/var/lib/postgresql/data/pgdata" ]; then
     echo "📦 Initializing PostgreSQL database..."
