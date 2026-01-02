@@ -1,5 +1,5 @@
 -- WHAMazon Database Initialization
--- Auto-generated: 2026-01-02T00:48:17.796Z
+-- Auto-generated: 2026-01-02T00:50:12.528Z
 -- DO NOT EDIT MANUALLY
 --
 -- Note: Schema is created by entrypoint.sh
@@ -37,14 +37,6 @@ INSERT INTO users (id, username, password, email, is_admin, created_at) VALUES (
   'new1767310199@test.com',
   false,
   '2026-01-01T18:29:59.361Z'
-);
-INSERT INTO users (id, username, password, email, is_admin, created_at) VALUES (
-  '5c305de5-fb5c-41cb-bffb-0ea60c51a8d2',
-  'admin',
-  '6107ad690e70c626a5b8857e84101b850e8f3c6d989c655b2fb1ad28e4ba721b592002aa0cf97891983a8f3eff76288b95e59e2c4a1cf33852105f0ebd1549bf.49bb6e4428b3b68768bc934193fb16b9',
-  'admin@sitesdown.net',
-  false,
-  '2026-01-01T18:31:33.894Z'
 );
 INSERT INTO users (id, username, password, email, is_admin, created_at) VALUES (
   '88cbb7b8-efe0-4bf3-bfd9-ace4a22068f7',
@@ -197,6 +189,14 @@ INSERT INTO users (id, username, password, email, is_admin, created_at) VALUES (
   'brandon.h@email.com',
   false,
   '2026-01-01T19:03:48.325Z'
+);
+INSERT INTO users (id, username, password, email, is_admin, created_at) VALUES (
+  '5c305de5-fb5c-41cb-bffb-0ea60c51a8d2',
+  'admin',
+  '6107ad690e70c626a5b8857e84101b850e8f3c6d989c655b2fb1ad28e4ba721b592002aa0cf97891983a8f3eff76288b95e59e2c4a1cf33852105f0ebd1549bf.49bb6e4428b3b68768bc934193fb16b9',
+  'admin@sitesdown.net',
+  true,
+  '2026-01-01T18:31:33.894Z'
 );
 
 -- Products (108 rows)
