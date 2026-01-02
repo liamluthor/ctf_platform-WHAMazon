@@ -1,5 +1,5 @@
 -- WHAMazon Database Initialization
--- Auto-generated: 2026-01-02T00:09:39.660Z
+-- Auto-generated: 2026-01-02T00:17:20.345Z
 -- DO NOT EDIT MANUALLY
 
 -- Drop existing tables

@@ -57,7 +57,7 @@ EXPOSE 5000
 ENV NODE_ENV=production \
     PORT=5000 \
     DATABASE_URL=postgresql://whamazon:whamazon_password@localhost:5432/whamazon \
-    SESSION_SECRET=whamazon_ctf_secret_key_$(date +%s)
+    SESSION_SECRET=whamazon_ctf_secret_key_change_me
 
 # Use entrypoint script to start both PostgreSQL and the app
 ENTRYPOINT ["/entrypoint.sh"]
