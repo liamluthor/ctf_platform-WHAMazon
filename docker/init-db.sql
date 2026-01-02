@@ -1,14 +1,9 @@
 -- WHAMazon Database Initialization
--- Auto-generated: 2026-01-02T00:17:20.345Z
+-- Auto-generated: 2026-01-02T00:48:17.796Z
 -- DO NOT EDIT MANUALLY
-
--- Drop existing tables
-DROP TABLE IF EXISTS cart_items CASCADE;
-DROP TABLE IF EXISTS order_items CASCADE;
-DROP TABLE IF EXISTS orders CASCADE;
-DROP TABLE IF EXISTS products CASCADE;
-DROP TABLE IF EXISTS users CASCADE;
-DROP TABLE IF EXISTS session CASCADE;
+--
+-- Note: Schema is created by entrypoint.sh
+-- This file only contains INSERT statements for data
 
 -- Users (24 rows)
 INSERT INTO users (id, username, password, email, is_admin, created_at) VALUES (

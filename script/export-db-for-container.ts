@@ -25,14 +25,9 @@ async function exportDatabase() {
   let sql = `-- WHAMazon Database Initialization
 -- Auto-generated: ${new Date().toISOString()}
 -- DO NOT EDIT MANUALLY
-
--- Drop existing tables
-DROP TABLE IF EXISTS cart_items CASCADE;
-DROP TABLE IF EXISTS order_items CASCADE;
-DROP TABLE IF EXISTS orders CASCADE;
-DROP TABLE IF EXISTS products CASCADE;
-DROP TABLE IF EXISTS users CASCADE;
-DROP TABLE IF EXISTS session CASCADE;
+--
+-- Note: Schema is created by entrypoint.sh
+-- This file only contains INSERT statements for data
 
 `;
 
