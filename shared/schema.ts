@@ -69,6 +69,19 @@ export const jobs = pgTable("jobs", {
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
+export const sellerProducts = pgTable("seller_products", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  title: text("title").notNull(),
+  description: text("description").notNull(),
+  price: decimal("price", { precision: 10, scale: 2 }).notNull(),
+  category: text("category").notNull(),
+  imageUrl: text("image_url").notNull(), // VULNERABLE: Not sanitized, allows XSS
+  quantity: integer("quantity").notNull().default(0),
+  status: text("status").notNull().default("pending"), // pending, approved, rejected
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
 export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
   password: true,
@@ -80,6 +93,7 @@ export const insertCartItemSchema = createInsertSchema(cartItems).omit({ id: tru
 export const insertOrderSchema = createInsertSchema(orders).omit({ id: true, createdAt: true });
 export const insertOrderItemSchema = createInsertSchema(orderItems).omit({ id: true, createdAt: true });
 export const insertJobSchema = createInsertSchema(jobs).omit({ id: true, createdAt: true, postedDate: true });
+export const insertSellerProductSchema = createInsertSchema(sellerProducts).omit({ id: true, createdAt: true, userId: true, status: true });
 
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
@@ -89,3 +103,5 @@ export type Order = typeof orders.$inferSelect;
 export type OrderItem = typeof orderItems.$inferSelect;
 export type Job = typeof jobs.$inferSelect;
 export type InsertJob = z.infer<typeof insertJobSchema>;
+export type SellerProduct = typeof sellerProducts.$inferSelect;
+export type InsertSellerProduct = z.infer<typeof insertSellerProductSchema>;

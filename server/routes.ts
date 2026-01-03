@@ -316,5 +316,114 @@ export async function registerRoutes(
     }
   });
 
+  // Seller Portal Routes
+  app.get("/api/seller/products", async (req: Request, res: Response) => {
+    if (!req.isAuthenticated()) {
+      return res.status(401).json({ message: "Not authenticated" });
+    }
+
+    try {
+      const products = await storage.getUserSellerProducts(req.user.id);
+      res.json({ products });
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.post("/api/seller/products", async (req: Request, res: Response) => {
+    if (!req.isAuthenticated()) {
+      return res.status(401).json({ message: "Not authenticated" });
+    }
+
+    try {
+      const { title, description, price, category, imageUrl, quantity } = req.body;
+
+      if (!title || !description || !price || !category || !imageUrl) {
+        return res.status(400).json({ message: "Missing required fields" });
+      }
+
+      // VULNERABLE: No sanitization of imageUrl - allows XSS
+      const product = await storage.createSellerProduct(req.user.id, {
+        title,
+        description,
+        price: String(price),
+        category,
+        imageUrl, // DANGEROUS: User input directly stored without sanitization
+        quantity: quantity || 0,
+      });
+
+      // Check if this is the XSS flag challenge
+      if (imageUrl.toLowerCase().includes("<script") && imageUrl.toLowerCase().includes("alert")) {
+        return res.json({
+          product,
+          flag: "FLAG{XSS_1N_TH3_S3LL3R_P0RT4L_1M4G3_URL}"
+        });
+      }
+
+      res.json({ product });
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.get("/api/seller/products/:id", async (req: Request, res: Response) => {
+    if (!req.isAuthenticated()) {
+      return res.status(401).json({ message: "Not authenticated" });
+    }
+
+    try {
+      const product = await storage.getSellerProduct(req.params.id);
+      if (!product) {
+        return res.status(404).json({ message: "Product not found" });
+      }
+
+      // Only allow users to view their own products
+      if (product.userId !== req.user.id && !req.user.isAdmin) {
+        return res.status(403).json({ message: "Not authorized" });
+      }
+
+      res.json({ product });
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.delete("/api/seller/products/:id", async (req: Request, res: Response) => {
+    if (!req.isAuthenticated()) {
+      return res.status(401).json({ message: "Not authenticated" });
+    }
+
+    try {
+      const product = await storage.getSellerProduct(req.params.id);
+      if (!product) {
+        return res.status(404).json({ message: "Product not found" });
+      }
+
+      // Only allow users to delete their own products
+      if (product.userId !== req.user.id && !req.user.isAdmin) {
+        return res.status(403).json({ message: "Not authorized" });
+      }
+
+      await storage.deleteSellerProduct(req.params.id);
+      res.json({ message: "Product deleted successfully" });
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  // Admin route to view all seller products (for the vulnerable display)
+  app.get("/api/admin/seller-products", async (req: Request, res: Response) => {
+    if (!req.isAuthenticated() || !req.user.isAdmin) {
+      return res.status(403).json({ message: "Admin access required" });
+    }
+
+    try {
+      const products = await storage.getAllSellerProducts();
+      res.json({ products });
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
   return httpServer;
 }

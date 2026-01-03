@@ -20,9 +20,9 @@ export function Footer() {
 
         <div className="flex flex-col gap-2">
           <h3 className="font-bold text-base mb-2">Make Money with Us</h3>
-          <Link href="/products" className="hover:underline text-gray-300">Sell products on WHAMazon</Link>
-          <Link href="/products" className="hover:underline text-gray-300">Sell on WHAMazon Business</Link>
-          <Link href="/products" className="hover:underline text-gray-300">Sell apps on WHAMazon</Link>
+          <Link href="/seller" className="hover:underline text-gray-300">Sell products on WHAMazon</Link>
+          <Link href="/seller" className="hover:underline text-gray-300">Sell on WHAMazon Business</Link>
+          <Link href="/seller" className="hover:underline text-gray-300">Sell apps on WHAMazon</Link>
           <Link href="/products" className="hover:underline text-gray-300">Become an Affiliate</Link>
           <Link href="/products" className="hover:underline text-gray-300">Advertise Your Products</Link>
           <Link href="/products" className="hover:underline text-gray-300">Self-Publish with Us</Link>

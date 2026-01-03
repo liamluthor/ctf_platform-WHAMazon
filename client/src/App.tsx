@@ -19,6 +19,7 @@ import ProductDetail from "@/pages/ProductDetail";
 import Careers from "@/pages/Careers";
 import JobDetail from "@/pages/JobDetail";
 import About from "@/pages/About";
+import Seller from "@/pages/Seller";
 
 function Router() {
   return (
@@ -36,6 +37,7 @@ function Router() {
       <Route path="/careers" component={Careers} />
       <Route path="/careers/:id" component={JobDetail} />
       <Route path="/about" component={About} />
+      <Route path="/seller" component={Seller} />
       <Route component={NotFound} />
     </Switch>
   );

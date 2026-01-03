@@ -8,16 +8,20 @@ import {
   type OrderItem,
   type Job,
   type InsertJob,
+  type SellerProduct,
+  type InsertSellerProduct,
   users,
   products,
   cartItems,
   orders,
   orderItems,
   jobs,
+  sellerProducts,
   insertCartItemSchema,
   insertOrderSchema,
   insertOrderItemSchema,
   insertJobSchema,
+  insertSellerProductSchema,
 } from "@shared/schema";
 import { eq, and, desc, or, ilike, sql } from "drizzle-orm";
 import { z } from "zod";
@@ -52,6 +56,14 @@ export interface IStorage {
   getAllJobs(filters?: { department?: string; location?: string; type?: string; search?: string }): Promise<Job[]>;
   getJob(id: string): Promise<Job | undefined>;
   createJob(job: InsertJob): Promise<Job>;
+
+  // Seller Product methods
+  getUserSellerProducts(userId: string): Promise<SellerProduct[]>;
+  getAllSellerProducts(): Promise<(SellerProduct & { user: User })[]>;
+  getSellerProduct(id: string): Promise<SellerProduct | undefined>;
+  createSellerProduct(userId: string, product: InsertSellerProduct): Promise<SellerProduct>;
+  updateSellerProduct(id: string, product: Partial<InsertSellerProduct>): Promise<SellerProduct | undefined>;
+  deleteSellerProduct(id: string): Promise<void>;
 }
 
 export class PostgresStorage implements IStorage {
@@ -308,6 +320,67 @@ export class PostgresStorage implements IStorage {
       .returning();
 
     return result[0];
+  }
+
+  // Seller Product methods
+  async getUserSellerProducts(userId: string): Promise<SellerProduct[]> {
+    return await db
+      .select()
+      .from(sellerProducts)
+      .where(eq(sellerProducts.userId, userId))
+      .orderBy(desc(sellerProducts.createdAt));
+  }
+
+  async getAllSellerProducts(): Promise<(SellerProduct & { user: User })[]> {
+    const result = await db
+      .select()
+      .from(sellerProducts)
+      .leftJoin(users, eq(sellerProducts.userId, users.id))
+      .orderBy(desc(sellerProducts.createdAt));
+
+    return result.map(row => ({
+      ...row.seller_products,
+      user: row.users!,
+    }));
+  }
+
+  async getSellerProduct(id: string): Promise<SellerProduct | undefined> {
+    const result = await db
+      .select()
+      .from(sellerProducts)
+      .where(eq(sellerProducts.id, id))
+      .limit(1);
+
+    return result[0];
+  }
+
+  async createSellerProduct(userId: string, product: InsertSellerProduct): Promise<SellerProduct> {
+    // VULNERABLE: No sanitization of imageUrl - allows XSS attacks
+    const result = await db
+      .insert(sellerProducts)
+      .values({
+        ...product,
+        userId,
+      })
+      .returning();
+
+    return result[0];
+  }
+
+  async updateSellerProduct(id: string, product: Partial<InsertSellerProduct>): Promise<SellerProduct | undefined> {
+    const result = await db
+      .update(sellerProducts)
+      .set(product)
+      .where(eq(sellerProducts.id, id))
+      .returning();
+
+    return result[0];
+  }
+
+  async deleteSellerProduct(id: string): Promise<void> {
+    await db
+      .delete(sellerProducts)
+      .where(eq(sellerProducts.id, id));
   }
 }
 
