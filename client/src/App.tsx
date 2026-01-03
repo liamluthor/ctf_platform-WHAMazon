@@ -18,6 +18,7 @@ import Orders from "@/pages/Orders";
 import ProductDetail from "@/pages/ProductDetail";
 import Careers from "@/pages/Careers";
 import JobDetail from "@/pages/JobDetail";
+import About from "@/pages/About";
 
 function Router() {
   return (
@@ -34,6 +35,7 @@ function Router() {
       <Route path="/product/:id" component={ProductDetail} />
       <Route path="/careers" component={Careers} />
       <Route path="/careers/:id" component={JobDetail} />
+      <Route path="/about" component={About} />
       <Route component={NotFound} />
     </Switch>
   );

@@ -12,7 +12,7 @@ export function Footer() {
           <h3 className="font-bold text-base mb-2">Get to Know Us</h3>
           <Link href="/careers" className="hover:underline text-gray-300">Careers</Link>
           <Link href="/products" className="hover:underline text-gray-300">Blog</Link>
-          <Link href="/products" className="hover:underline text-gray-300">About WHAMazon</Link>
+          <Link href="/about" className="hover:underline text-gray-300">About WHAMazon</Link>
           <Link href="/products" className="hover:underline text-gray-300">Investor Relations</Link>
           <Link href="/products" className="hover:underline text-gray-300">WHAMazon Devices</Link>
           <Link href="/products" className="hover:underline text-gray-300">WHAMazon Science</Link>
