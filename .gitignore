@@ -11,3 +11,4 @@ script/generate-category-images.ts
 script/fix-stock-images.ts
 script/.unsplash-key
 docker/init-db.sql
+.env
