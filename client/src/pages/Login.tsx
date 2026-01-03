@@ -80,7 +80,7 @@ export default function Login() {
           </Button>
 
           <div className="text-xs text-gray-600 mt-4 leading-normal">
-            By continuing, you agree to WHAMazon's <a href="#" className="text-blue-700 hover:text-orange-700 hover:underline">Conditions of Use</a> and <a href="#" className="text-blue-700 hover:text-orange-700 hover:underline">Privacy Notice</a>.
+            By continuing, you agree to WHAMazon's <Link href="/products"><a className="text-blue-700 hover:text-orange-700 hover:underline">Conditions of Use</a></Link> and <Link href="/products"><a className="text-blue-700 hover:text-orange-700 hover:underline">Privacy Notice</a></Link>.
           </div>
           
           <div className="flex items-center gap-2 text-xs text-gray-600 mt-2 cursor-pointer group">
@@ -106,9 +106,9 @@ export default function Login() {
 
       <div className="mt-8 border-t border-gray-200 w-full pt-8 flex flex-col items-center gap-2">
         <div className="flex gap-8 text-xs text-blue-700">
-           <a href="#" className="hover:text-orange-700 hover:underline">Conditions of Use</a>
-           <a href="#" className="hover:text-orange-700 hover:underline">Privacy Notice</a>
-           <a href="#" className="hover:text-orange-700 hover:underline">Help</a>
+           <Link href="/products"><a className="hover:text-orange-700 hover:underline">Conditions of Use</a></Link>
+           <Link href="/products"><a className="hover:text-orange-700 hover:underline">Privacy Notice</a></Link>
+           <Link href="/products"><a className="hover:text-orange-700 hover:underline">Help</a></Link>
         </div>
         <div className="text-xs text-gray-500">
           © 1996-2024, WHAMazon.com, Inc. or its affiliates

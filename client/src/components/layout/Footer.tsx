@@ -10,40 +10,40 @@ export function Footer() {
       <div className="max-w-[1000px] mx-auto py-12 px-4 grid grid-cols-2 md:grid-cols-4 gap-8 text-sm">
         <div className="flex flex-col gap-2">
           <h3 className="font-bold text-base mb-2">Get to Know Us</h3>
-          <a href="#" className="hover:underline text-gray-300">Careers</a>
-          <a href="#" className="hover:underline text-gray-300">Blog</a>
-          <a href="#" className="hover:underline text-gray-300">About WHAMazon</a>
-          <a href="#" className="hover:underline text-gray-300">Investor Relations</a>
-          <a href="#" className="hover:underline text-gray-300">WHAMazon Devices</a>
-          <a href="#" className="hover:underline text-gray-300">WHAMazon Science</a>
+          <Link href="/products"><a className="hover:underline text-gray-300">Careers</a></Link>
+          <Link href="/products"><a className="hover:underline text-gray-300">Blog</a></Link>
+          <Link href="/products"><a className="hover:underline text-gray-300">About WHAMazon</a></Link>
+          <Link href="/products"><a className="hover:underline text-gray-300">Investor Relations</a></Link>
+          <Link href="/products"><a className="hover:underline text-gray-300">WHAMazon Devices</a></Link>
+          <Link href="/products"><a className="hover:underline text-gray-300">WHAMazon Science</a></Link>
         </div>
-        
+
         <div className="flex flex-col gap-2">
           <h3 className="font-bold text-base mb-2">Make Money with Us</h3>
-          <a href="#" className="hover:underline text-gray-300">Sell products on WHAMazon</a>
-          <a href="#" className="hover:underline text-gray-300">Sell on WHAMazon Business</a>
-          <a href="#" className="hover:underline text-gray-300">Sell apps on WHAMazon</a>
-          <a href="#" className="hover:underline text-gray-300">Become an Affiliate</a>
-          <a href="#" className="hover:underline text-gray-300">Advertise Your Products</a>
-          <a href="#" className="hover:underline text-gray-300">Self-Publish with Us</a>
+          <Link href="/products"><a className="hover:underline text-gray-300">Sell products on WHAMazon</a></Link>
+          <Link href="/products"><a className="hover:underline text-gray-300">Sell on WHAMazon Business</a></Link>
+          <Link href="/products"><a className="hover:underline text-gray-300">Sell apps on WHAMazon</a></Link>
+          <Link href="/products"><a className="hover:underline text-gray-300">Become an Affiliate</a></Link>
+          <Link href="/products"><a className="hover:underline text-gray-300">Advertise Your Products</a></Link>
+          <Link href="/products"><a className="hover:underline text-gray-300">Self-Publish with Us</a></Link>
         </div>
-        
+
         <div className="flex flex-col gap-2">
           <h3 className="font-bold text-base mb-2">WHAMazon Payment Products</h3>
-          <a href="#" className="hover:underline text-gray-300">WHAMazon Business Card</a>
-          <a href="#" className="hover:underline text-gray-300">Shop with Points</a>
-          <a href="#" className="hover:underline text-gray-300">Reload Your Balance</a>
-          <a href="#" className="hover:underline text-gray-300">WHAMazon Currency Converter</a>
+          <Link href="/products"><a className="hover:underline text-gray-300">WHAMazon Business Card</a></Link>
+          <Link href="/products"><a className="hover:underline text-gray-300">Shop with Points</a></Link>
+          <Link href="/products"><a className="hover:underline text-gray-300">Reload Your Balance</a></Link>
+          <Link href="/products"><a className="hover:underline text-gray-300">WHAMazon Currency Converter</a></Link>
         </div>
-        
+
         <div className="flex flex-col gap-2">
           <h3 className="font-bold text-base mb-2">Let Us Help You</h3>
-          <a href="#" className="hover:underline text-gray-300">WHAMazon and COVID-19</a>
-          <a href="#" className="hover:underline text-gray-300">Your Account</a>
-          <a href="#" className="hover:underline text-gray-300">Your Orders</a>
-          <a href="#" className="hover:underline text-gray-300">Shipping Rates & Policies</a>
-          <a href="#" className="hover:underline text-gray-300">Returns & Replacements</a>
-          <a href="#" className="hover:underline text-gray-300">Help</a>
+          <Link href="/products"><a className="hover:underline text-gray-300">WHAMazon and COVID-19</a></Link>
+          <Link href="/profile"><a className="hover:underline text-gray-300">Your Account</a></Link>
+          <Link href="/profile"><a className="hover:underline text-gray-300">Your Orders</a></Link>
+          <Link href="/products"><a className="hover:underline text-gray-300">Shipping Rates & Policies</a></Link>
+          <Link href="/products"><a className="hover:underline text-gray-300">Returns & Replacements</a></Link>
+          <Link href="/products"><a className="hover:underline text-gray-300">Help</a></Link>
         </div>
       </div>
       

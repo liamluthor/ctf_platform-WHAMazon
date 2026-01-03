@@ -154,12 +154,11 @@ export default function Profile() {
                               {order.status === "delivered" && "Delivered"}
                             </h3>
 
-                            <a
-                              href="#"
-                              className="text-blue-700 hover:text-orange-700 hover:underline font-medium text-base line-clamp-2"
-                            >
-                              {item.product.title}
-                            </a>
+                            <Link href={`/products/${item.product.id}`}>
+                              <a className="text-blue-700 hover:text-orange-700 hover:underline font-medium text-base line-clamp-2">
+                                {item.product.title}
+                              </a>
+                            </Link>
                             <div className="text-sm text-gray-600 mt-1">
                               Quantity: {item.quantity}
                             </div>
