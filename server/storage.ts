@@ -6,16 +6,20 @@ import {
   type CartItem,
   type Order,
   type OrderItem,
+  type Job,
+  type InsertJob,
   users,
   products,
   cartItems,
   orders,
   orderItems,
+  jobs,
   insertCartItemSchema,
   insertOrderSchema,
   insertOrderItemSchema,
+  insertJobSchema,
 } from "@shared/schema";
-import { eq, and, desc } from "drizzle-orm";
+import { eq, and, desc, or, ilike, sql } from "drizzle-orm";
 import { z } from "zod";
 
 export interface IStorage {
@@ -43,6 +47,11 @@ export interface IStorage {
   getUserOrders(userId: string): Promise<(Order & { items: (OrderItem & { product: Product })[] })[]>;
   getAllOrders(): Promise<(Order & { user: User, items: (OrderItem & { product: Product })[] })[]>;
   getOrder(orderId: string): Promise<(Order & { items: (OrderItem & { product: Product })[] }) | undefined>;
+
+  // Job methods
+  getAllJobs(filters?: { department?: string; location?: string; type?: string; search?: string }): Promise<Job[]>;
+  getJob(id: string): Promise<Job | undefined>;
+  createJob(job: InsertJob): Promise<Job>;
 }
 
 export class PostgresStorage implements IStorage {
@@ -244,6 +253,61 @@ export class PostgresStorage implements IStorage {
         product: row.products!,
       })),
     };
+  }
+
+  // Job methods
+  async getAllJobs(filters?: { department?: string; location?: string; type?: string; search?: string }): Promise<Job[]> {
+    let query = db.select().from(jobs).where(eq(jobs.isActive, true));
+
+    const conditions = [eq(jobs.isActive, true)];
+
+    if (filters?.department) {
+      conditions.push(eq(jobs.department, filters.department));
+    }
+
+    if (filters?.location) {
+      conditions.push(ilike(jobs.location, `%${filters.location}%`));
+    }
+
+    if (filters?.type) {
+      conditions.push(eq(jobs.type, filters.type));
+    }
+
+    if (filters?.search) {
+      conditions.push(
+        or(
+          ilike(jobs.title, `%${filters.search}%`),
+          ilike(jobs.description, `%${filters.search}%`)
+        )!
+      );
+    }
+
+    const result = await db
+      .select()
+      .from(jobs)
+      .where(and(...conditions))
+      .orderBy(desc(jobs.postedDate));
+
+    return result;
+  }
+
+  async getJob(id: string): Promise<Job | undefined> {
+    const result = await db
+      .select()
+      .from(jobs)
+      .where(eq(jobs.id, id))
+      .limit(1);
+
+    return result[0];
+  }
+
+  async createJob(job: InsertJob): Promise<Job> {
+    const result = await db
+      .insert(jobs)
+      .values(job)
+      .returning();
+
+    return result[0];
   }
 }
 

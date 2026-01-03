@@ -51,6 +51,24 @@ export const orderItems = pgTable("order_items", {
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
+export const jobs = pgTable("jobs", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  title: text("title").notNull(),
+  department: text("department").notNull(), // Engineering, Product, Operations, etc.
+  location: text("location").notNull(),
+  type: text("type").notNull(), // Full-time, Internship, Contract
+  level: text("level").notNull(), // Entry Level, Mid Level, Senior, Principal
+  description: text("description").notNull(),
+  responsibilities: text("responsibilities").notNull(), // JSON array as string
+  basicQualifications: text("basic_qualifications").notNull(), // JSON array as string
+  preferredQualifications: text("preferred_qualifications").notNull(), // JSON array as string
+  compensationMin: integer("compensation_min"), // Annual salary min in dollars
+  compensationMax: integer("compensation_max"), // Annual salary max in dollars
+  isActive: boolean("is_active").notNull().default(true),
+  postedDate: timestamp("posted_date").notNull().defaultNow(),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
 export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
   password: true,
@@ -61,6 +79,7 @@ export const insertProductSchema = createInsertSchema(products);
 export const insertCartItemSchema = createInsertSchema(cartItems).omit({ id: true, createdAt: true });
 export const insertOrderSchema = createInsertSchema(orders).omit({ id: true, createdAt: true });
 export const insertOrderItemSchema = createInsertSchema(orderItems).omit({ id: true, createdAt: true });
+export const insertJobSchema = createInsertSchema(jobs).omit({ id: true, createdAt: true, postedDate: true });
 
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
@@ -68,3 +87,5 @@ export type Product = typeof products.$inferSelect;
 export type CartItem = typeof cartItems.$inferSelect;
 export type Order = typeof orders.$inferSelect;
 export type OrderItem = typeof orderItems.$inferSelect;
+export type Job = typeof jobs.$inferSelect;
+export type InsertJob = z.infer<typeof insertJobSchema>;

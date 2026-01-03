@@ -30,11 +30,9 @@ export function Header() {
       {/* Top Nav - Dark Blue */}
       <div className="bg-primary text-white py-2 px-4 flex items-center gap-4 h-[60px]">
         {/* Logo */}
-        <Link href="/">
-          <a className="flex items-center hover:outline-1 outline-white p-1 rounded-sm cursor-pointer mr-2">
-            <img src={logo} alt="WHAMazon" className="h-8 w-auto object-contain" />
-            <span className="font-bold text-xl tracking-tighter italic ml-1 text-white">.com</span>
-          </a>
+        <Link href="/" className="flex items-center hover:outline-1 outline-white p-1 rounded-sm cursor-pointer mr-2">
+          <img src={logo} alt="WHAMazon" className="h-8 w-auto object-contain" />
+          <span className="font-bold text-xl tracking-tighter italic ml-1 text-white">.com</span>
         </Link>
 
         {/* Deliver To */}
@@ -71,19 +69,15 @@ export function Header() {
                 <span className="font-bold">Account</span>
               </div>
 
-              <Link href="/profile">
-                <a className="hidden md:flex flex-col leading-none text-xs hover:outline-1 outline-white p-2 rounded-sm cursor-pointer">
-                  <span className="text-white">Returns</span>
-                  <span className="font-bold">& Orders</span>
-                </a>
+              <Link href="/profile" className="hidden md:flex flex-col leading-none text-xs hover:outline-1 outline-white p-2 rounded-sm cursor-pointer">
+                <span className="text-white">Returns</span>
+                <span className="font-bold">& Orders</span>
               </Link>
 
               {isAdmin && (
-                <Link href="/admin">
-                  <a className="hidden md:flex items-center gap-1 text-xs hover:outline-1 outline-white p-2 rounded-sm cursor-pointer">
-                    <Shield className="w-4 h-4" />
-                    <span className="font-bold">Admin</span>
-                  </a>
+                <Link href="/admin" className="hidden md:flex items-center gap-1 text-xs hover:outline-1 outline-white p-2 rounded-sm cursor-pointer">
+                  <Shield className="w-4 h-4" />
+                  <span className="font-bold">Admin</span>
                 </Link>
               )}
 
@@ -96,37 +90,31 @@ export function Header() {
               </button>
             </>
           ) : (
-            <Link href="/login">
-              <a className="hidden md:flex flex-col leading-none text-xs hover:outline-1 outline-white p-2 rounded-sm cursor-pointer">
-                <span className="text-white">Hello, sign in</span>
-                <span className="font-bold">Account & Lists</span>
-              </a>
+            <Link href="/login" className="hidden md:flex flex-col leading-none text-xs hover:outline-1 outline-white p-2 rounded-sm cursor-pointer">
+              <span className="text-white">Hello, sign in</span>
+              <span className="font-bold">Account & Lists</span>
             </Link>
           )}
 
-          <Link href="/cart">
-            <a className="flex items-end hover:outline-1 outline-white p-2 rounded-sm cursor-pointer relative">
-              <ShoppingCart className="w-8 h-8" />
-              <span className="font-bold text-orange-400 absolute top-0 left-[22px] text-sm">{totalItems}</span>
-              <span className="font-bold text-sm hidden md:inline mb-1">Cart</span>
-            </a>
+          <Link href="/cart" className="flex items-end hover:outline-1 outline-white p-2 rounded-sm cursor-pointer relative">
+            <ShoppingCart className="w-8 h-8" />
+            <span className="font-bold text-orange-400 absolute top-0 left-[22px] text-sm">{totalItems}</span>
+            <span className="font-bold text-sm hidden md:inline mb-1">Cart</span>
           </Link>
         </div>
       </div>
 
       {/* Sub Nav - Darker Gray */}
       <div className="bg-secondary text-white px-4 py-1.5 flex items-center text-sm gap-4 overflow-x-auto whitespace-nowrap">
-        <Link href="/products">
-          <a className="flex items-center font-bold cursor-pointer hover:outline-1 outline-white p-1 rounded-sm">
-            <Menu className="w-5 h-5 mr-1" />
-            All
-          </a>
+        <Link href="/products" className="flex items-center font-bold cursor-pointer hover:outline-1 outline-white p-1 rounded-sm">
+          <Menu className="w-5 h-5 mr-1" />
+          All
         </Link>
-        <Link href="/products"><a className="hover:outline-1 outline-white p-1 rounded-sm cursor-pointer">Today's Deals</a></Link>
-        <Link href="/products"><a className="hover:outline-1 outline-white p-1 rounded-sm cursor-pointer">Customer Service</a></Link>
-        <Link href="/products"><a className="hover:outline-1 outline-white p-1 rounded-sm cursor-pointer">Registry</a></Link>
-        <Link href="/products"><a className="hover:outline-1 outline-white p-1 rounded-sm cursor-pointer">Gift Cards</a></Link>
-        <Link href="/products"><a className="hover:outline-1 outline-white p-1 rounded-sm cursor-pointer">Sell</a></Link>
+        <Link href="/products" className="hover:outline-1 outline-white p-1 rounded-sm cursor-pointer">Today's Deals</Link>
+        <Link href="/products" className="hover:outline-1 outline-white p-1 rounded-sm cursor-pointer">Customer Service</Link>
+        <Link href="/products" className="hover:outline-1 outline-white p-1 rounded-sm cursor-pointer">Registry</Link>
+        <Link href="/products" className="hover:outline-1 outline-white p-1 rounded-sm cursor-pointer">Gift Cards</Link>
+        <Link href="/products" className="hover:outline-1 outline-white p-1 rounded-sm cursor-pointer">Sell</Link>
       </div>
     </header>
   );

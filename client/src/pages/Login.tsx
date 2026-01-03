@@ -80,7 +80,7 @@ export default function Login() {
           </Button>
 
           <div className="text-xs text-gray-600 mt-4 leading-normal">
-            By continuing, you agree to WHAMazon's <Link href="/products"><a className="text-blue-700 hover:text-orange-700 hover:underline">Conditions of Use</a></Link> and <Link href="/products"><a className="text-blue-700 hover:text-orange-700 hover:underline">Privacy Notice</a></Link>.
+            By continuing, you agree to WHAMazon's <Link href="/products" className="text-blue-700 hover:text-orange-700 hover:underline">Conditions of Use</Link> and <Link href="/products" className="text-blue-700 hover:text-orange-700 hover:underline">Privacy Notice</Link>.
           </div>
           
           <div className="flex items-center gap-2 text-xs text-gray-600 mt-2 cursor-pointer group">
@@ -96,19 +96,17 @@ export default function Login() {
          <div className="flex-1 border-t border-gray-300"></div>
       </div>
 
-      <Link href="/register">
-        <a className="w-full max-w-[350px]">
-          <Button variant="outline" className="w-full bg-gray-50 hover:bg-gray-100 border-gray-300 shadow-sm rounded-sm text-sm font-normal text-black h-8">
-            Create your WHAMazon account
-          </Button>
-        </a>
+      <Link href="/register" className="w-full max-w-[350px]">
+        <Button variant="outline" className="w-full bg-gray-50 hover:bg-gray-100 border-gray-300 shadow-sm rounded-sm text-sm font-normal text-black h-8">
+          Create your WHAMazon account
+        </Button>
       </Link>
 
       <div className="mt-8 border-t border-gray-200 w-full pt-8 flex flex-col items-center gap-2">
         <div className="flex gap-8 text-xs text-blue-700">
-           <Link href="/products"><a className="hover:text-orange-700 hover:underline">Conditions of Use</a></Link>
-           <Link href="/products"><a className="hover:text-orange-700 hover:underline">Privacy Notice</a></Link>
-           <Link href="/products"><a className="hover:text-orange-700 hover:underline">Help</a></Link>
+           <Link href="/products" className="hover:text-orange-700 hover:underline">Conditions of Use</Link>
+           <Link href="/products" className="hover:text-orange-700 hover:underline">Privacy Notice</Link>
+           <Link href="/products" className="hover:text-orange-700 hover:underline">Help</Link>
         </div>
         <div className="text-xs text-gray-500">
           © 1996-2024, WHAMazon.com, Inc. or its affiliates

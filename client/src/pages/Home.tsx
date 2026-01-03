@@ -46,7 +46,7 @@ export default function Home() {
               <div className="flex-1 overflow-hidden">
                  <img src={cat.img} alt={cat.title} className="w-full h-full object-cover cursor-pointer hover:scale-105 transition-transform duration-500" />
               </div>
-              <Link href="/products"><a className="text-sm text-[#007185] hover:text-[#C7511F] hover:underline font-medium">See more</a></Link>
+              <Link href="/products" className="text-sm text-[#007185] hover:text-[#C7511F] hover:underline font-medium">See more</Link>
             </div>
           ))}
         </div>
@@ -63,7 +63,7 @@ export default function Home() {
             <div className="bg-white p-6 shadow-sm">
               <div className="flex items-center gap-4 mb-4">
                 <h2 className="text-xl font-bold">Best Sellers in Computers & Accessories</h2>
-                <Link href="/products"><a className="text-sm text-[#007185] hover:text-[#C7511F] hover:underline">See more</a></Link>
+                <Link href="/products" className="text-sm text-[#007185] hover:text-[#C7511F] hover:underline">See more</Link>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 {products.slice(0, 4).map(product => (
@@ -81,7 +81,7 @@ export default function Home() {
             <div className="bg-white p-6 shadow-sm">
               <div className="flex items-center gap-4 mb-4">
                 <h2 className="text-xl font-bold">Frequently Repurchased in Supplies</h2>
-                <Link href="/products"><a className="text-sm text-[#007185] hover:text-[#C7511F] hover:underline">See more</a></Link>
+                <Link href="/products" className="text-sm text-[#007185] hover:text-[#C7511F] hover:underline">See more</Link>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 {products.slice(4, 8).map(product => (

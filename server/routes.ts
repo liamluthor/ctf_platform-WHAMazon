@@ -288,5 +288,33 @@ export async function registerRoutes(
     }
   });
 
+  // Job routes
+  app.get("/api/jobs", async (req: Request, res: Response) => {
+    try {
+      const { department, location, type, search } = req.query;
+      const jobs = await storage.getAllJobs({
+        department: department as string | undefined,
+        location: location as string | undefined,
+        type: type as string | undefined,
+        search: search as string | undefined,
+      });
+      res.json({ jobs });
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.get("/api/jobs/:id", async (req: Request, res: Response) => {
+    try {
+      const job = await storage.getJob(req.params.id);
+      if (!job) {
+        return res.status(404).json({ message: "Job not found" });
+      }
+      res.json({ job });
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
   return httpServer;
 }

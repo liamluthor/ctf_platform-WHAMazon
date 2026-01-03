@@ -121,15 +121,15 @@ export default function Register() {
           </Button>
 
           <div className="text-xs text-gray-600 mt-4 leading-normal">
-            By creating an account, you agree to WHAMazon's <Link href="/products"><a className="text-blue-700 hover:text-orange-700 hover:underline">Conditions of Use</a></Link> and <Link href="/products"><a className="text-blue-700 hover:text-orange-700 hover:underline">Privacy Notice</a></Link>.
+            By creating an account, you agree to WHAMazon's <Link href="/products" className="text-blue-700 hover:text-orange-700 hover:underline">Conditions of Use</Link> and <Link href="/products" className="text-blue-700 hover:text-orange-700 hover:underline">Privacy Notice</Link>.
           </div>
-          
+
            <div className="border-t border-gray-200 mt-6 pt-4">
               <div className="text-xs">
-                Already have an account? <Link href="/login"><a className="text-blue-700 hover:text-orange-700 hover:underline">Sign in</a></Link>
+                Already have an account? <Link href="/login" className="text-blue-700 hover:text-orange-700 hover:underline">Sign in</Link>
               </div>
                <div className="text-xs mt-1">
-                Buying for work? <Link href="/products"><a className="text-blue-700 hover:text-orange-700 hover:underline">Create a free business account</a></Link>
+                Buying for work? <Link href="/products" className="text-blue-700 hover:text-orange-700 hover:underline">Create a free business account</Link>
               </div>
            </div>
         </form>
@@ -137,9 +137,9 @@ export default function Register() {
 
       <div className="mt-4 border-t border-gray-200 w-full pt-8 flex flex-col items-center gap-2">
         <div className="flex gap-8 text-xs text-blue-700">
-           <Link href="/products"><a className="hover:text-orange-700 hover:underline">Conditions of Use</a></Link>
-           <Link href="/products"><a className="hover:text-orange-700 hover:underline">Privacy Notice</a></Link>
-           <Link href="/products"><a className="hover:text-orange-700 hover:underline">Help</a></Link>
+           <Link href="/products" className="hover:text-orange-700 hover:underline">Conditions of Use</Link>
+           <Link href="/products" className="hover:text-orange-700 hover:underline">Privacy Notice</Link>
+           <Link href="/products" className="hover:text-orange-700 hover:underline">Help</Link>
         </div>
         <div className="text-xs text-gray-500">
           © 1996-2024, WHAMazon.com, Inc. or its affiliates

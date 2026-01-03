@@ -50,6 +50,10 @@ passport.serializeUser((user: Express.User, done) => {
 passport.deserializeUser(async (id: string, done) => {
   try {
     const user = await storage.getUser(id);
+    if (!user) {
+      // User no longer exists in database, clear the session
+      return done(null, false);
+    }
     done(null, user);
   } catch (err) {
     done(err);

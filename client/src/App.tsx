@@ -16,6 +16,8 @@ import Cart from "@/pages/Cart";
 import Checkout from "@/pages/Checkout";
 import Orders from "@/pages/Orders";
 import ProductDetail from "@/pages/ProductDetail";
+import Careers from "@/pages/Careers";
+import JobDetail from "@/pages/JobDetail";
 
 function Router() {
   return (
@@ -30,6 +32,8 @@ function Router() {
       <Route path="/checkout" component={Checkout} />
       <Route path="/orders" component={Orders} />
       <Route path="/product/:id" component={ProductDetail} />
+      <Route path="/careers" component={Careers} />
+      <Route path="/careers/:id" component={JobDetail} />
       <Route component={NotFound} />
     </Switch>
   );
