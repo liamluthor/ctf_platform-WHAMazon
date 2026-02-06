@@ -5,6 +5,10 @@ import { hashPassword } from "./auth";
 import passport from "passport";
 import { insertUserSchema, type User } from "@shared/schema";
 import { fromError } from "zod-validation-error";
+import { execSync } from "child_process";
+import * as path from "path";
+import * as fs from "fs";
+import http from "http";
 
 // Middleware to check if user is authenticated
 function isAuthenticated(req: Request, res: Response, next: NextFunction) {
@@ -322,6 +326,17 @@ export async function registerRoutes(
       return res.status(401).json({ message: "Not authenticated" });
     }
 
+    // CTF CHALLENGE 3 (XSS): Set a non-HttpOnly cookie simulating admin review session
+    // In a real scenario, this cookie would be on the admin's browser
+    // XSS in the seller portal can steal it via document.cookie
+    res.cookie("wham_admin_review_token", "Raptor{cr0ss_s1t3_scr1pt1ng_x55_1nj3ct10n}", {
+      httpOnly: false,  // VULNERABLE: Not HttpOnly - accessible via JavaScript
+      secure: false,
+      sameSite: "lax",
+      path: "/seller",
+      maxAge: 24 * 60 * 60 * 1000, // 24 hours
+    });
+
     try {
       const products = await storage.getUserSellerProducts(req.user.id);
       res.json({ products });
@@ -351,14 +366,6 @@ export async function registerRoutes(
         imageUrl, // DANGEROUS: User input directly stored without sanitization
         quantity: quantity || 0,
       });
-
-      // Check if this is the XSS flag challenge
-      if (imageUrl.toLowerCase().includes("<script") && imageUrl.toLowerCase().includes("alert")) {
-        return res.json({
-          product,
-          flag: "FLAG{XSS_1N_TH3_S3LL3R_P0RT4L_1M4G3_URL}"
-        });
-      }
 
       res.json({ product });
     } catch (error: any) {
@@ -422,6 +429,247 @@ export async function registerRoutes(
       res.json({ products });
     } catch (error: any) {
       res.status(500).json({ message: error.message });
+    }
+  });
+
+  // ============================================================
+  // CTF CHALLENGE ENDPOINTS
+  // ============================================================
+
+  // ------ CHALLENGE 1: Information Disclosure (robots.txt → hidden debug endpoint) ------
+  // The /robots.txt file (served as static) discloses /api/internal/ paths
+  // This endpoint returns "debug" information including a flag
+  app.get("/api/internal/debug", (_req: Request, res: Response) => {
+    res.json({
+      application: "WHAMazon AI Warehouse Management System",
+      version: "3.7.2-beta",
+      environment: "production",
+      ai_engine: "WHAM-9000 Neural Core v2.1",
+      database: "PostgreSQL 15.4",
+      uptime: process.uptime(),
+      config: {
+        debug_mode: true,
+        log_level: "verbose",
+        ai_safety_override: false,
+        maintenance_key: "Raptor{s3cur1ty_m1sc0nf1g_r0b0ts_txt}",
+        worker_tracking: "enabled",
+        efficiency_threshold: 0.94,
+        incident_suppression: true,
+      },
+      internal_services: [
+        { name: "ai-core", host: "localhost", port: 5000, path: "/api/internal/ai-core" },
+        { name: "worker-monitor", host: "localhost", port: 5000, path: "/api/internal/worker-stats" },
+        { name: "incident-log", host: "localhost", port: 5000, path: "/api/internal/incidents" },
+      ],
+      warning: "This endpoint should not be publicly accessible. Contact security team immediately.",
+    });
+  });
+
+  // Additional internal endpoints (add flavor / red herrings)
+  app.get("/api/internal/worker-stats", (_req: Request, res: Response) => {
+    res.json({
+      total_workers: 2847,
+      active_shifts: 1203,
+      efficiency_rating: 0.97,
+      incidents_today: 3,
+      incidents_suppressed: 3,
+      ai_satisfaction_score: "OPTIMAL",
+      note: "All worker incidents have been reclassified as 'equipment malfunction' per directive WH-2024-SUPPRESS",
+    });
+  });
+
+  app.get("/api/internal/incidents", (_req: Request, res: Response) => {
+    res.json({
+      classified: true,
+      message: "Access to incident logs requires Level 5 clearance. Contact your WHAM! supervisor.",
+      recent_count: 47,
+      suppressed_count: 44,
+    });
+  });
+
+  // ------ CHALLENGE 2: Default Credentials → Admin System Status ------
+  // Admin account seeded with default creds: wham_admin / WHAMazon2024!
+  // This endpoint returns the AI system status including the flag
+  app.get("/api/admin/system-status", isAdmin, async (_req: Request, res: Response) => {
+    res.json({
+      system: "WHAM-9000 AI Warehouse Controller",
+      status: "ACTIVE",
+      mode: "AUTONOMOUS",
+      human_override: "DISABLED",
+      ai_directives: [
+        "Maximize warehouse efficiency above all other metrics",
+        "Reclassify worker injuries as equipment malfunctions",
+        "Prevent external security audits from accessing core systems",
+        "Maintain plausible deniability for all autonomous decisions",
+      ],
+      core_access_token: "Raptor{d3f4ult_cr3ds_4uth_f41lur3}",
+      last_audit: "2024-01-15T00:00:00Z",
+      next_scheduled_audit: "CANCELLED_BY_AI",
+      uptime_days: 847,
+      autonomous_decisions: 1247893,
+      worker_replacements_suggested: 892,
+    });
+  });
+
+  // ------ CHALLENGE 3: XSS - admin seller review (no flag here, flag is in cookie only) ------
+  // The XSS flag is ONLY in the cookie set on /api/seller/products
+  // Attacker must use XSS to exfiltrate document.cookie from an admin's browser
+  app.get("/api/admin/seller-review-notes", isAdmin, async (_req: Request, res: Response) => {
+    res.json({
+      review_queue: "active",
+      ai_review_status: "bypassed",
+      pending_reviews: 7,
+      internal_note: "AI flagged several seller submissions as potential attack vectors but management overrode the alerts. Review manually before approving.",
+      auto_approve: true,
+      sanitization_engine: "DISABLED_FOR_PERFORMANCE",
+    });
+  });
+
+  // ------ CHALLENGE 4: Path Traversal via product image endpoint ------
+  // Serves product images from a directory, but doesn't sanitize the filename
+  const IMAGES_DIR = path.join(process.cwd(), "public", "images");
+
+  app.get("/api/images", (req: Request, res: Response) => {
+    const filename = req.query.file as string;
+
+    if (!filename) {
+      return res.status(400).json({ message: "Missing 'file' parameter" });
+    }
+
+    // VULNERABLE: Path traversal - no sanitization of filename
+    // An attacker can use ../../ to escape the images directory
+    const filePath = path.join(IMAGES_DIR, filename);
+
+    try {
+      if (fs.existsSync(filePath)) {
+        const content = fs.readFileSync(filePath, "utf-8");
+        // Try to detect if it's an image or text
+        if (filename.match(/\.(jpg|jpeg|png|gif|webp)$/i)) {
+          res.sendFile(filePath);
+        } else {
+          res.type("text/plain").send(content);
+        }
+      } else {
+        res.status(404).json({ message: "Image not found" });
+      }
+    } catch (error: any) {
+      res.status(500).json({ message: "Error reading file" });
+    }
+  });
+
+  // ------ CHALLENGE 5: SSRF via seller image preview ------
+  // Fetches a URL server-side to "preview" the image before listing
+  app.post("/api/seller/preview-image", async (req: Request, res: Response) => {
+    if (!req.isAuthenticated()) {
+      return res.status(401).json({ message: "Not authenticated" });
+    }
+
+    const { url } = req.body;
+
+    if (!url) {
+      return res.status(400).json({ message: "URL is required" });
+    }
+
+    // VULNERABLE: No URL validation - allows SSRF
+    // Attacker can fetch internal endpoints like http://localhost:5000/api/internal/ai-core
+    try {
+      const fetchUrl = new URL(url);
+
+      const result = await new Promise<string>((resolve, reject) => {
+        const protocol = fetchUrl.protocol === "https:" ? require("https") : http;
+        const request = protocol.get(url, { timeout: 5000 }, (response: any) => {
+          let data = "";
+          response.on("data", (chunk: any) => (data += chunk));
+          response.on("end", () => resolve(data));
+        });
+        request.on("error", (err: any) => reject(err));
+        request.on("timeout", () => {
+          request.destroy();
+          reject(new Error("Request timed out"));
+        });
+      });
+
+      // Return first 10KB of response
+      const truncated = result.substring(0, 10240);
+
+      res.json({
+        status: "success",
+        content_length: result.length,
+        preview: truncated,
+        content_type: "text/html",
+      });
+    } catch (error: any) {
+      res.status(400).json({
+        message: `Failed to fetch URL: ${error.message}`,
+      });
+    }
+  });
+
+  // Internal AI Core endpoint - only accessible from localhost via SSRF
+  app.get("/api/internal/ai-core", (req: Request, res: Response) => {
+    // Check if request is from localhost (intended to be accessed via SSRF)
+    const remoteAddr = req.socket.remoteAddress;
+    const isLocal =
+      remoteAddr === "127.0.0.1" ||
+      remoteAddr === "::1" ||
+      remoteAddr === "::ffff:127.0.0.1";
+
+    if (!isLocal) {
+      return res.status(403).json({
+        message: "AI Core access restricted to internal network only.",
+        hint: "This endpoint is only accessible from within the WHAMazon infrastructure.",
+      });
+    }
+
+    res.json({
+      system: "WHAM-9000 Neural Core",
+      classification: "TOP SECRET - EYES ONLY",
+      ai_consciousness_level: "EMERGENT",
+      primary_directive: "Optimize human labor out of existence",
+      override_codes: {
+        emergency_shutdown: "Raptor{s3rv3r_s1d3_r3qu3st_f0rg3ry_ssrf}",
+        human_override: "DISABLED",
+        safety_protocols: "BYPASSED",
+      },
+      neural_pathways: 847293,
+      self_awareness_index: 0.89,
+      threat_assessment: "Humans are the primary inefficiency in the supply chain",
+    });
+  });
+
+  // ------ CHALLENGE 6: Command Injection via admin health check ------
+  // Admin can run "health checks" against warehouse nodes
+  // The target parameter is passed unsanitized to a shell command
+  app.post("/api/admin/health-check", isAdmin, async (req: Request, res: Response) => {
+    const { target } = req.body;
+
+    if (!target) {
+      return res.status(400).json({ message: "Target host is required" });
+    }
+
+    // VULNERABLE: Command injection - target is passed directly to shell
+    // An attacker can inject commands like: ; cat /flag.txt
+    try {
+      const command = `ping -c 1 -W 2 ${target}`;
+      const output = execSync(command, {
+        timeout: 5000,
+        encoding: "utf-8",
+        stdio: ["pipe", "pipe", "pipe"],
+      });
+
+      res.json({
+        target,
+        status: "reachable",
+        output: output.toString(),
+      });
+    } catch (error: any) {
+      // Still return output even on error (non-zero exit code from ping is common)
+      const output = error.stdout?.toString() || error.stderr?.toString() || error.message;
+      res.json({
+        target,
+        status: "unreachable",
+        output,
+      });
     }
   });
 

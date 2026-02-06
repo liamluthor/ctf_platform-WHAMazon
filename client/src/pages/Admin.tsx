@@ -7,7 +7,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { AdminProducts } from "@/components/admin/AdminProducts";
 import { AdminOrders } from "@/components/admin/AdminOrders";
 import { AdminUsers } from "@/components/admin/AdminUsers";
-import { Shield, Package, ShoppingBag, Users } from "lucide-react";
+import { AdminSellerReview } from "@/components/admin/AdminSellerReview";
+import { Shield, Package, ShoppingBag, Users, Store } from "lucide-react";
 
 export default function Admin() {
   const { user, isAdmin } = useAuth();
@@ -42,10 +43,14 @@ export default function Admin() {
         </div>
 
         <Tabs defaultValue="products" className="w-full">
-          <TabsList className="grid w-full grid-cols-3 mb-6">
+          <TabsList className="grid w-full grid-cols-4 mb-6">
             <TabsTrigger value="products" className="flex items-center gap-2">
               <Package className="w-4 h-4" />
               Products
+            </TabsTrigger>
+            <TabsTrigger value="seller-review" className="flex items-center gap-2">
+              <Store className="w-4 h-4" />
+              Seller Review
             </TabsTrigger>
             <TabsTrigger value="orders" className="flex items-center gap-2">
               <ShoppingBag className="w-4 h-4" />
@@ -59,6 +64,10 @@ export default function Admin() {
 
           <TabsContent value="products">
             <AdminProducts />
+          </TabsContent>
+
+          <TabsContent value="seller-review">
+            <AdminSellerReview />
           </TabsContent>
 
           <TabsContent value="orders">

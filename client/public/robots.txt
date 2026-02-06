@@ -1,0 +1,19 @@
+# WHAMazon Web Crawler Policy
+# Last updated: 2024-08-15
+# Contact: webmaster@whamazon.com
+
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /api/internal/
+Disallow: /api/admin/
+Disallow: /api/internal/debug
+Disallow: /api/internal/ai-core
+Disallow: /api/internal/worker-stats
+Disallow: /api/internal/incidents
+
+# AI System endpoints - DO NOT CRAWL
+# These are critical infrastructure endpoints for the WHAM-9000 system
+# Unauthorized access will be logged and reported
+
+Sitemap: https://whamazon.com/sitemap.xml

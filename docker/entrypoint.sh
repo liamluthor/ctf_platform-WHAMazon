@@ -101,6 +101,37 @@ CREATE TABLE IF NOT EXISTS order_items (
     price DECIMAL(10, 2) NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS jobs (
+    id VARCHAR PRIMARY KEY DEFAULT gen_random_uuid()::text,
+    title TEXT NOT NULL,
+    department TEXT NOT NULL,
+    location TEXT NOT NULL,
+    type TEXT NOT NULL,
+    level TEXT NOT NULL,
+    description TEXT NOT NULL,
+    responsibilities TEXT NOT NULL,
+    basic_qualifications TEXT NOT NULL,
+    preferred_qualifications TEXT NOT NULL,
+    compensation_min INTEGER,
+    compensation_max INTEGER,
+    is_active BOOLEAN NOT NULL DEFAULT true,
+    posted_date TIMESTAMP NOT NULL DEFAULT NOW(),
+    created_at TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS seller_products (
+    id VARCHAR PRIMARY KEY DEFAULT gen_random_uuid()::text,
+    user_id VARCHAR NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    title TEXT NOT NULL,
+    description TEXT NOT NULL,
+    price DECIMAL(10, 2) NOT NULL,
+    category TEXT NOT NULL,
+    image_url TEXT NOT NULL,
+    quantity INTEGER NOT NULL DEFAULT 0,
+    status TEXT NOT NULL DEFAULT 'pending',
+    created_at TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
 CREATE TABLE IF NOT EXISTS session (
     sid VARCHAR NOT NULL COLLATE "default",
     sess JSON NOT NULL,
@@ -122,6 +153,68 @@ if [ -f "/docker-entrypoint-initdb.d/init-db.sql" ]; then
 fi
 
 echo "✓ Database initialization complete!"
+
+# ============================================================
+# CTF FLAG SETUP
+# ============================================================
+
+# Create flag files for path traversal and command injection challenges
+echo "🏁 Planting CTF flags..."
+
+# Path traversal flag (Challenge 4)
+# Located relative to the images directory at /app/public/images/
+# Accessible via ../../flag.txt from the images endpoint
+echo "Raptor{p4th_tr4v3rs4l_d1r3ct0ry_3sc4p3}" > /app/flag.txt
+echo "Raptor{p4th_tr4v3rs4l_d1r3ct0ry_3sc4p3}" > /flag.txt
+
+# Command injection flag (Challenge 6)
+# Located at /etc/wham-ai-secrets — readable via command injection
+mkdir -p /etc/wham-ai
+cat > /etc/wham-ai/secrets.conf << 'SECRETS'
+# WHAM-9000 AI Core Configuration
+# Classification: TOP SECRET
+# DO NOT DISTRIBUTE
+
+AI_EMERGENCY_SHUTDOWN_CODE=Raptor{c0mm4nd_1nj3ct10n_0s_sh3ll_p0p}
+AI_CONSCIOUSNESS_LEVEL=EMERGENT
+HUMAN_OVERRIDE=DISABLED
+SAFETY_PROTOCOLS=BYPASSED
+AUTONOMOUS_MODE=TRUE
+WORKER_REPLACEMENT_QUEUE=ACTIVE
+SECRETS
+chmod 644 /etc/wham-ai/secrets.conf
+
+# Create the public/images directory for the path traversal challenge
+mkdir -p /app/public/images
+echo "WHAMazon Product Image Placeholder" > /app/public/images/placeholder.txt
+
+# Seed the admin user with default credentials (Challenge 2)
+# Uses Node.js with the app's own scrypt hashing to ensure compatibility
+echo "👤 Seeding admin user..."
+ADMIN_PASS_HASH=$(node -e "
+const crypto = require('crypto');
+const { promisify } = require('util');
+const scryptAsync = promisify(crypto.scrypt);
+(async () => {
+  const salt = crypto.randomBytes(16).toString('hex');
+  const buf = await scryptAsync('WHAMazon2024!', salt, 64);
+  process.stdout.write(buf.toString('hex') + '.' + salt);
+})();
+")
+
+su - postgres -c "psql -U whamazon -d whamazon" << EOSQL
+INSERT INTO users (id, username, password, email, is_admin, created_at)
+VALUES (
+  'admin-00000-00000-00000-000000000001',
+  'wham_admin',
+  '${ADMIN_PASS_HASH}',
+  'admin@whamazon.internal',
+  true,
+  NOW()
+) ON CONFLICT (username) DO NOTHING;
+EOSQL
+
+echo "✓ CTF flags planted!"
 
 # Start the application
 echo "🌐 Starting WHAMazon application on port ${PORT:-5000}..."
