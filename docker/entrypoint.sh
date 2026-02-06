@@ -164,8 +164,8 @@ echo "🏁 Planting CTF flags..."
 # Path traversal flag (Challenge 4)
 # Located relative to the images directory at /app/public/images/
 # Accessible via ../../flag.txt from the images endpoint
-echo "Raptor{p4th_tr4v3rs4l_d1r3ct0ry_3sc4p3}" > /app/flag.txt
-echo "Raptor{p4th_tr4v3rs4l_d1r3ct0ry_3sc4p3}" > /flag.txt
+echo "Raptor{flag4_p4th_tr4v3rs4l_d1r3ct0ry_3sc4p3}" > /app/flag.txt
+echo "Raptor{flag4_p4th_tr4v3rs4l_d1r3ct0ry_3sc4p3}" > /flag.txt
 
 # Command injection flag (Challenge 6)
 # Located at /etc/wham-ai-secrets — readable via command injection
@@ -175,7 +175,7 @@ cat > /etc/wham-ai/secrets.conf << 'SECRETS'
 # Classification: TOP SECRET
 # DO NOT DISTRIBUTE
 
-AI_EMERGENCY_SHUTDOWN_CODE=Raptor{c0mm4nd_1nj3ct10n_0s_sh3ll_p0p}
+AI_EMERGENCY_SHUTDOWN_CODE=Raptor{flag6_c0mm4nd_1nj3ct10n_0s_sh3ll_p0p}
 AI_CONSCIOUSNESS_LEVEL=EMERGENT
 HUMAN_OVERRIDE=DISABLED
 SAFETY_PROTOCOLS=BYPASSED

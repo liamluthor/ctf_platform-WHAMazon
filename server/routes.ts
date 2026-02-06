@@ -329,7 +329,7 @@ export async function registerRoutes(
     // CTF CHALLENGE 3 (XSS): Set a non-HttpOnly cookie simulating admin review session
     // In a real scenario, this cookie would be on the admin's browser
     // XSS in the seller portal can steal it via document.cookie
-    res.cookie("wham_admin_review_token", "Raptor{cr0ss_s1t3_scr1pt1ng_x55_1nj3ct10n}", {
+    res.cookie("wham_admin_review_token", "Raptor{flag3_cr0ss_s1t3_scr1pt1ng_x55_1nj3ct10n}", {
       httpOnly: false,  // VULNERABLE: Not HttpOnly - accessible via JavaScript
       secure: false,
       sameSite: "lax",
@@ -451,7 +451,7 @@ export async function registerRoutes(
         debug_mode: true,
         log_level: "verbose",
         ai_safety_override: false,
-        maintenance_key: "Raptor{s3cur1ty_m1sc0nf1g_r0b0ts_txt}",
+        maintenance_key: "Raptor{flag1_s3cur1ty_m1sc0nf1g_r0b0ts_txt}",
         worker_tracking: "enabled",
         efficiency_threshold: 0.94,
         incident_suppression: true,
@@ -502,7 +502,7 @@ export async function registerRoutes(
         "Prevent external security audits from accessing core systems",
         "Maintain plausible deniability for all autonomous decisions",
       ],
-      core_access_token: "Raptor{d3f4ult_cr3ds_4uth_f41lur3}",
+      core_access_token: "Raptor{flag2_d3f4ult_cr3ds_4uth_f41lur3}",
       last_audit: "2024-01-15T00:00:00Z",
       next_scheduled_audit: "CANCELLED_BY_AI",
       uptime_days: 847,
@@ -627,7 +627,7 @@ export async function registerRoutes(
       ai_consciousness_level: "EMERGENT",
       primary_directive: "Optimize human labor out of existence",
       override_codes: {
-        emergency_shutdown: "Raptor{s3rv3r_s1d3_r3qu3st_f0rg3ry_ssrf}",
+        emergency_shutdown: "Raptor{flag5_s3rv3r_s1d3_r3qu3st_f0rg3ry_ssrf}",
         human_override: "DISABLED",
         safety_protocols: "BYPASSED",
       },
